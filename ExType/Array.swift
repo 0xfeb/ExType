@@ -9,38 +9,38 @@
 import Foundation
 
 public extension Array {
-    public func value(at:Int) -> Element? {
-        if at < 0 || at >= self.count {
+    public func value(at index: Int) -> Element? {
+        if index < 0 || index >= self.count {
             return nil
         }
-        
-        return self[at]
+
+        return self[index]
     }
-    
-    public func randomList(count:Int) -> [Element] {
+
+    public func randomList(count: Int) -> [Element] {
         if self.count <= count { return self.shuffled() }
 
         return Array(shuffled()[0..<count])
     }
-    
-    public func buildDictionary<Key, Value>(toDict combiner:(Element)->(Key, Value)) -> [Key:Value] {
-        var result:[Key:Value] = [:]
-        
-        for n in self {
-            let kv = combiner(n)
-            result[kv.0] = kv.1
+
+    public func buildDictionary<Key, Value>(toDict combiner: (Element) -> (Key, Value)) -> [Key: Value] {
+        var result: [Key: Value] = [:]
+
+        for item in self {
+            let keyValue = combiner(item)
+            result[keyValue.0] = keyValue.1
         }
-        
+
         return result
     }
 }
 
-public func ex_stride(from: Double, to: Double, numberOfParts: Double) -> [Double] {
-    let step = (to - from) / numberOfParts
-    return Array<Double>(stride(from: from, to: to, by: step))
+public func ex_stride(from: Double, to toValue: Double, numberOfParts: Double) -> [Double] {
+    let step = (toValue - from) / numberOfParts
+    return [Double](stride(from: from, to: toValue, by: step))
 }
 
-public func ex_stride(from: Int, to: Int, numberOfParts: Int) -> [Int] {
-    let step = (to - from) / numberOfParts
-    return Array<Int>(stride(from: from, to: to, by: step))
+public func ex_stride(from: Int, to toValue: Int, numberOfParts: Int) -> [Int] {
+    let step = (toValue - from) / numberOfParts
+    return [Int](stride(from: from, to: toValue, by: step))
 }

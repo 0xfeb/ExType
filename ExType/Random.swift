@@ -8,24 +8,23 @@
 
 import Foundation
 
-private func arc4random<T:BinaryInteger> (type: T.Type) -> T {
-    var r: T = 0
-    arc4random_buf(&r, MemoryLayout<T>.size)
-    return r
+private func arc4random<T: BinaryInteger> (type: T.Type) -> T {
+    var number: T = 0
+    arc4random_buf(&number, MemoryLayout<T>.size)
+    return number
 }
 
-public func ex_random<T:FixedWidthInteger>(lower:T = T.min, upper:T = T.max) -> T {
-    var m: T
-    let u = upper - lower
-    var r = arc4random(type: T.self)
-    if u > T(T.max) {
-        m = 1 + ~u
+public func ex_random<T: FixedWidthInteger>(lower: T = T.min, upper: T = T.max) -> T {
+    var limit: T
+    let range = upper - lower
+    var number = arc4random(type: T.self)
+    if range > T(T.max) {
+        limit = 1 + ~range
     } else {
-        m = ((T.max - (u * 2)) + 1) % u
+        limit = ((T.max - (range * 2)) + 1) % range
     }
-    while r < m {
-        r = arc4random(type: T.self)
+    while number < limit {
+        number = arc4random(type: T.self)
     }
-    return (r % u) + lower
+    return (number % range) + lower
 }
-
