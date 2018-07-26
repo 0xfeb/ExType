@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.name         = "ExType"
   s.version      = "0.0.1"
-  s.summary      = "Types converter / builder and other help tools"
+  s.summary      = "Types converter / builder / help tools"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,10 +25,10 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-  Easy library for types extra usage.
+  Easy library for types extra usage. 
                    DESC
 
-  s.homepage     = "http://EXAMPLE/ExType"
+  s.homepage     = "https://coding.net/u/danielwyo/p/ExType/git"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
