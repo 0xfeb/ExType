@@ -36,6 +36,10 @@ public extension String {
         }
         return nil
     }
+
+    public var trimed : String {
+        return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+    }
 }
 
 public func ex_uuid() -> String {

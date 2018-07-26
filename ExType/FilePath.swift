@@ -113,10 +113,6 @@ public class ExFilePath {
     public func addComponented(string: String) -> String {
         return (fullPath as NSString).appendingPathComponent(string)
     }
-
-    public func trimed() -> String {
-        return fullPath.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-    }
 }
 
 public func ex_url(_ string: String) -> URL? {
