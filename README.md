@@ -135,6 +135,14 @@ Current string as regular expression to parse a text and get mathced result.
 Property - Get trimed string, remove whitespace character in begin or end of string.
 > `var trimed : String`
 
+Get index of offset
+
+> `func index(of offset: Int) -> String.Index`
+
+Get sub string by integer range
+
+> `subscript(_ range: Range<Int>) -> String`
+
 * Function
 
 Generate an UUID String

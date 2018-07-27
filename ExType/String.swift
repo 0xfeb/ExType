@@ -40,6 +40,16 @@ public extension String {
     public var trimed : String {
         return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
+    
+    public func index(of offset: Int) -> String.Index {
+        return self.index(self.startIndex, offsetBy: offset)
+    }
+    
+    public subscript(_ range: Range<Int>) -> String {
+        let start = index(of: range.lowerBound)
+        let end = index(of: range.upperBound)
+        return String(self[start..<end])
+    }
 }
 
 public func ex_uuid() -> String {
