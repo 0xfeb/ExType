@@ -26,9 +26,15 @@ public extension Int {
 }
 
 public extension Comparable {
-    public mutating func limit(min: Self, max: Self) {
+    public mutating func limit(_ min: Self, _ max: Self) {
         if self < min { self = min }
         if self > max { self = max }
+    }
+    
+    public func limited(_ min: Self, _ max: Self) -> Self {
+        if self < min { return min }
+        if self > max { return max }
+        return self
     }
 }
 

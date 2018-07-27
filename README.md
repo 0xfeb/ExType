@@ -38,7 +38,9 @@ Chinese string description, use '亿,万,千' characters
 * Extension -- Comparable
 
 Set a value between min and max numbers. It will be reset as min value while it less than the min number, or set as max value in the opsite situation
-> `func limit(min: Self, max: Self)`
+> `mutating func limit(_ min: Self, _ max: Self)`
+
+> `func limited(_ min: Self, _ max: Self) -> Self`
 
 * Extension -- Range
 
