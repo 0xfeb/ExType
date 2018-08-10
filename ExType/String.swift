@@ -50,6 +50,10 @@ public extension String {
         let end = index(of: range.upperBound)
         return String(self[start..<end])
     }
+    
+    public var dict:[String: Any]? {
+        return ex_json(text: self)
+    }
 }
 
 public func ex_uuid() -> String {
