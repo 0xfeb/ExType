@@ -54,6 +54,42 @@ public extension String {
     public var dict:[String: Any]? {
         return ex_json(text: self)
     }
+    
+    public func apart2(_ s:String) -> (String, String)? {
+        let list = self.components(separatedBy: s)
+        if list.count < 2 {
+            return nil
+        }
+        
+        return (list[0], list[1])
+    }
+    
+    public func apart3(_ s:String) -> (String, String, String)? {
+        let list = self.components(separatedBy: s)
+        if list.count < 3 {
+            return nil
+        }
+        
+        return (list[0], list[1], list[2])
+    }
+    
+    public func apart4(_ s:String) -> (String, String, String, String)? {
+        let list = self.components(separatedBy: s)
+        if list.count < 4 {
+            return nil
+        }
+        
+        return (list[0], list[1], list[2], list[3])
+    }
+    
+    public func apart5(_ s:String) -> (String, String, String, String, String)? {
+        let list = self.components(separatedBy: s)
+        if list.count < 5 {
+            return nil
+        }
+        
+        return (list[0], list[1], list[2], list[3], list[4])
+    }
 }
 
 public func ex_uuid() -> String {
