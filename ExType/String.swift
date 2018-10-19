@@ -90,6 +90,15 @@ public extension String {
         
         return (list[0], list[1], list[2], list[3], list[4])
     }
+    
+    public func apart6(_ s:String) -> (String, String, String, String, String, String)? {
+        let list = self.components(separatedBy: s)
+        if list.count < 6 {
+            return nil
+        }
+        
+        return (list[0], list[1], list[2], list[3], list[4], list[5])
+    }
 }
 
 public func ex_uuid() -> String {
