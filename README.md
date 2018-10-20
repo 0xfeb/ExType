@@ -138,12 +138,24 @@ Property - Get trimed string, remove whitespace character in begin or end of str
 > `var trimed : String`
 
 Get index of offset
-
 > `func index(of offset: Int) -> String.Index`
 
 Get sub string by integer range
-
 > `subscript(_ range: Range<Int>) -> String`
+
+Get JSON dictionary from string
+> `var dict:[String: Any]?`
+
+Apart string
+> `func apart2(_ s:String) -> (String, String)?`
+
+> `func apart3(_ s:String) -> (String, String, String)?`
+
+> `func apart4(_ s:String) -> (String, String, String, String)?`
+
+> `func apart5(_ s:String) -> (String, String, String, String, String)?`
+
+> `func apart6(_ s:String) -> (String, String, String, String, String, String)?`
 
 * Function
 
@@ -218,6 +230,54 @@ Add component at the end of path.
 
 Generate url by string.
 > `func ex_url(_ string: String) -> URL?`
+
+### UIType
+Some types for user interface
+
+* Extension - UIFont
+
+Create a UIFont instance by text
+> `init?(text:String)`
+
+Convert UIFont instance to text
+> `var text:String`
+
+
+* Extension - CGRect
+
+Create a CGRect instance by text
+> `init?(text:String)`
+
+Convert CGRect instance to text
+> `var text:String`
+
+
+* Extension - CGPoint
+
+Create a CGPoint instance by text
+> `init?(text:String)`
+
+Convert CGPoint instance to text
+> `var text:String`
+
+
+* Extension - CGSize
+
+Create a CGSize instance by text
+> `init?(text:String)`
+
+Convert CGSize instance to text
+> `var text:String`
+
+
+* Extension - CGAffineTransform
+
+Create a CGAffineTransform instance by text
+> `init?(text:String)`
+
+Convert CGAffineTransform instance to text
+> `var text:String`
+
 
 ### Author
 WangYuanou
