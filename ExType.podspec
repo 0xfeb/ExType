@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "ExType"
-  s.version      = "0.0.8"
+  s.version      = "0.0.9"
   s.summary      = "Types converter / builder / help tools"
 
   # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   Types converter , builder , help tools. Easy library for types extra usage. 
                    DESC
 
-  s.homepage     = "https://coding.net/u/danielwyo/p/ExType/git"
+  s.homepage     = "https://gitee.com/clstd/ExType"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://coding.net/u/danielwyo/p/ExType/git", :tag => "#{s.version}" }
+  s.source       = { :git => "git@gitee.com:clstd/ExType.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
