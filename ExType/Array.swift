@@ -33,6 +33,8 @@ public extension Array {
 
         return result
     }
+    
+    
 }
 
 public func ex_stride(from: Double, to toValue: Double, numberOfParts: Double) -> [Double] {
@@ -43,4 +45,22 @@ public func ex_stride(from: Double, to toValue: Double, numberOfParts: Double) -
 public func ex_stride(from: Int, to toValue: Int, numberOfParts: Int) -> [Int] {
     let step = (toValue - from) / numberOfParts
     return [Int](stride(from: from, to: toValue, by: step))
+}
+
+public extension Sequence {
+    public func ex_all<T:Numeric>(compute:(Element)->T, _ event:(_ item:(item:Element, index:Int, total:T, remain:T, used:T))->()) {
+        let total:T = self.reduce(0) { (prev, curr) -> T in
+            return prev + compute(curr)
+        }
+        
+        var used:T = 0
+        var index:Int = 0
+        self.forEach { (elem) in
+            let remain = total - used
+            let t = (elem, index, total, remain, used)
+            event(t)
+            index += 1
+            used += compute(elem)
+        }
+    }
 }
