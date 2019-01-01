@@ -49,6 +49,18 @@ public extension Int {
 
         self = total
     }
+    
+    public init(nearUp upbound:Double) {
+        let c = Int(upbound)
+        self = (upbound - Double(c) > 0) ? (c + 1) : c
+    }
+    
+    init?(skipLetter source:String) {
+        let nig = source.hasPrefix("-")
+        let cleared = source.filter({ "0123456789".contains($0) })
+        guard let value = Int(cleared) else { return nil }
+        self = nig ? (0 - value) : value
+    }
 }
 
 public extension Float {

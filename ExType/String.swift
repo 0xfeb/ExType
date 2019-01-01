@@ -55,49 +55,113 @@ public extension String {
         return ex_json(text: self)
     }
     
-    public func apart2(_ s:String) -> (String, String)? {
-        let list = self.components(separatedBy: s)
-        if list.count < 2 {
-            return nil
-        }
+    public func split(size:Int) -> [String] {
+        if size < 1 { return [self] }
         
-        return (list[0], list[1])
+        return stride(from: 0, to: self.count, by: size)
+            .compactMap({ (position) -> String? in
+                return self.subString(from: position, size: size)
+            })
     }
     
-    public func apart3(_ s:String) -> (String, String, String)? {
-        let list = self.components(separatedBy: s)
-        if list.count < 3 {
-            return nil
-        }
+    public func split(_ seperater:String, limit:Int) -> [String] {
+        if limit < 2 { return [self] }
         
-        return (list[0], list[1], list[2])
+        let c = self.components(separatedBy: seperater)
+        if c.count <= limit { return c }
+        
+        var result = c[..<(limit-1)]
+        result.append(c[(limit-1)...].joined(separator: seperater))
+        
+        return Array(result)
     }
     
-    public func apart4(_ s:String) -> (String, String, String, String)? {
-        let list = self.components(separatedBy: s)
-        if list.count < 4 {
+    public func subString(from:Int, size:Int) -> String? {
+        guard let indexLow = index(startIndex, offsetBy: from, limitedBy: endIndex), indexLow != endIndex else {
             return nil
         }
         
-        return (list[0], list[1], list[2], list[3])
+        let indexHigh = index(indexLow, offsetBy: size, limitedBy: endIndex) ?? endIndex
+        
+        return String(self[indexLow..<indexHigh])
     }
     
-    public func apart5(_ s:String) -> (String, String, String, String, String)? {
-        let list = self.components(separatedBy: s)
-        if list.count < 5 {
-            return nil
+    public func char(at position:Int) -> Character? {
+        if let index = self.index(self.startIndex, offsetBy: position, limitedBy: self.endIndex), index != endIndex {
+            return self[index]
         }
-        
-        return (list[0], list[1], list[2], list[3], list[4])
+        return nil
     }
     
-    public func apart6(_ s:String) -> (String, String, String, String, String, String)? {
-        let list = self.components(separatedBy: s)
-        if list.count < 6 {
-            return nil
+    public func fixFront(fix:Character, textLength:Int) -> String {
+        let fixSize = textLength - count
+        if fixSize > 0 {
+            return String(repeating: fix, count: fixSize) + self
+        } else {
+            return self
+        }
+    }
+    
+    public func fixBack(fix:Character, textLength:Int) -> String {
+        let fixSize = textLength - count
+        if fixSize > 0 {
+            return self + String(repeating: fix, count: fixSize)
+        } else {
+            return self
+        }
+    }
+    
+    public func isFormat(start:Character?, middle:String?, end:Character?) -> Bool {
+        for (index, char) in self.enumerated() {
+            if index == 0 {
+                if let start = start {
+                    if char != start { return false }
+                }
+            } else if index == count - 1 {
+                if let end = end {
+                    if char != end { return false }
+                }
+            } else {
+                if let middle = middle {
+                    if !middle.contains(char) { return false }
+                }
+            }
+        }
+        return true
+    }
+    
+    public func count(_ character:Character) -> UInt {
+        return self.reduce(UInt(0), { $0 + ($1 == character ? 1 : 0) })
+    }
+    
+    public func count(check: (Character) throws ->Bool ) rethrows -> UInt {
+        return try self.reduce(UInt(0), { $0 + (try check($1) ? 1 : 0) })
+    }
+    
+    public func trim(characters:String = " ") -> String {
+        return trimLeft(characters: characters)
+            .trimRight(characters: characters)
+    }
+    
+    public func trimLeft(characters:String = " ") -> String {
+        var offset = self.startIndex
+        for (index, char) in self.enumerated() {
+            if characters.contains(char) {
+                offset = self.index(self.startIndex, offsetBy: index+1)
+            } else {
+                break
+            }
         }
         
-        return (list[0], list[1], list[2], list[3], list[4], list[5])
+        if offset == self.startIndex {
+            return self
+        } else {
+            return String(self[offset...])
+        }
+    }
+    
+    public func trimRight(characters:String = " ") -> String {
+        return String(String(self.reversed()).trimLeft(characters:characters).reversed())
     }
 }
 

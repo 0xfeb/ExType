@@ -56,6 +56,29 @@ public extension Range where Bound: SignedInteger & UnsignedInteger {
     }
 }
 
+public extension Collection {
+    public func keep(op:(Element)->Bool) -> [Element] {
+        var result:[Element] = []
+        for n in self {
+            if op(n) {
+                result.append(n)
+            }
+        }
+        return result
+    }
+    
+    public func discard(op:(Element)->Bool) -> [Element] {
+        var result:[Element] = []
+        for n in self {
+            if !op(n) {
+                result.append(n)
+            }
+        }
+        return result
+    }
+}
+
+
 public func ex_set<T>(_ item: T, _ action: (T) -> Void) -> T {
     action(item)
     return item

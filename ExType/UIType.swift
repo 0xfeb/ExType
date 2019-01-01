@@ -12,7 +12,7 @@ let apartText = "%"
 
 public extension UIFont {
     public convenience init?(text:String) {
-        guard let (name, size) = text.apart2(apartText) else { return nil }
+        guard let (name, size) = text.split(apartText, limit: 2).tuple2 else { return nil }
         guard let textSize = Float(size) else { return nil }
         
         self.init(name: name, size: CGFloat(textSize))
@@ -25,7 +25,7 @@ public extension UIFont {
 
 public extension CGRect {
     public init?(text:String) {
-        guard let (x, y, w, h) = text.apart4(apartText) else { return nil }
+        guard let (x, y, w, h) = text.split(apartText, limit: 4).tuple4 else { return nil }
         guard let left = Double(x), let top = Double(y),
             let width = Double(w), let height = Double(h) else { return nil }
         
@@ -39,7 +39,7 @@ public extension CGRect {
 
 public extension CGPoint {
     public init?(text:String) {
-        guard let (x, y) = text.apart2(apartText) else { return nil }
+        guard let (x, y) = text.split(apartText, limit: 2).tuple2 else { return nil }
         guard let left = Double(x), let top = Double(y) else { return nil }
         
         self.init(x: left, y: top)
@@ -52,7 +52,7 @@ public extension CGPoint {
 
 public extension CGSize {
     public init?(text:String) {
-        guard let (w, h) = text.apart2(apartText) else { return nil }
+        guard let (w, h) = text.split(apartText, limit: 2).tuple2 else { return nil }
         guard let width = Double(w), let height = Double(h) else { return nil }
         
         self.init(width: width, height: height)
@@ -65,7 +65,7 @@ public extension CGSize {
 
 public extension CGAffineTransform {
     public init?(text:String) {
-        guard let (_a, _b, _c, _d, _tx, _ty) = text.apart6(apartText) else { return nil }
+        guard let (_a, _b, _c, _d, _tx, _ty) = text.split(apartText, limit: 6).tuple6 else { return nil }
         guard let a = Double(_a), let b = Double(_b), let c = Double(_c), let d = Double(_d),
             let tx = Double(_tx), let ty = Double(_ty) else { return nil }
         
