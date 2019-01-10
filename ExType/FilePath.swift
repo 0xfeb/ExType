@@ -8,117 +8,110 @@
 
 import Foundation
 
-public class ExFilePath {
-    public var fullPath: String
-
-    public init(_ fullPath: String) {
-        self.fullPath = fullPath
-    }
-
-    public init?(_ url: URL) {
-        if url.absoluteString.starts(with: "http") {
-            return nil
+public extension String {
+    public var existsDirectory:Bool {
+        if let attr = try? FileManager.default.attributesOfItem(atPath: self),
+            let type = attr[FileAttributeKey.type] as? FileAttributeType {
+            return type == .typeDirectory
         }
-        self.fullPath = url.absoluteString
+        
+        return false
     }
-
-    public enum PathType {
-        case file
-        case directory
-    }
-
-    public var pathType: PathType {
-        if let attr = try? FileManager.default.attributesOfItem(atPath: fullPath) {
-            if let type = attr[FileAttributeKey.type] as? FileAttributeType {
-                if type == .typeRegular {
-                    return PathType.file
-                }
-            }
+    
+    public var existsFile:Bool {
+        if let attr = try? FileManager.default.attributesOfItem(atPath: self),
+            let type = attr[FileAttributeKey.type] as? FileAttributeType {
+            return type == .typeRegular
         }
-        return PathType.directory
+        
+        return false
     }
-
-    public func listSubPaths(recurison: Bool = false) -> [ExFilePath] {
-        let filePath = URL(fileURLWithPath: fullPath)
-        let opt: FileManager.DirectoryEnumerationOptions =
-            recurison ? [.skipsHiddenFiles] : [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
-        if let itor = FileManager.default.enumerator(at: filePath,
+    
+    public var subPaths:[String] {
+        if let itor = FileManager.default.enumerator(at: URL(fileURLWithPath: self),
                                                      includingPropertiesForKeys: nil,
-                                                     options: opt,
+                                                     options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants],
                                                      errorHandler: nil) {
-            return itor.allObjects.compactMap({ (filePath) in
-                if let filePath = filePath as? URL {
-                    return ExFilePath(filePath.absoluteString)
-                }
-                return nil
+            return itor.allObjects.compactMap({ (path) in
+                return (path as? URL)?.absoluteString
             })
         }
+        
         return []
     }
-
-    public static func createPath(path: String) -> Bool {
-        return ((try? FileManager.default.createDirectory(atPath: path,
-                                                          withIntermediateDirectories: true,
-                                                          attributes: nil)) != nil)
+    
+    public var subDeepPaths:[String] {
+        if let itor = FileManager.default.enumerator(at: URL(fileURLWithPath: self),
+                                                     includingPropertiesForKeys: nil,
+                                                     options: [.skipsHiddenFiles],
+                                                     errorHandler: nil) {
+            return itor.allObjects.compactMap({ (path) in
+                return (path as? URL)?.absoluteString
+            })
+        }
+        
+        return []
     }
-
-    public static func removePath(path: String) -> Bool {
-        return ((try? FileManager.default.removeItem(atPath: path)) != nil)
+    
+    public func createDirectory() throws {
+        try FileManager.default.createDirectory(atPath: self,
+                                                withIntermediateDirectories: true,
+                                                attributes: nil)
     }
-
-    public static var home: ExFilePath {
-        return ExFilePath(NSHomeDirectory())
+    
+    public func removePath() throws {
+        try FileManager.default.removeItem(atPath: self)
     }
-
-    // 文档路径
-    public static var documents: ExFilePath {
-        return ExFilePath(NSHomeDirectory() + "/Documents")
+    
+    public static var homePath: String {
+        return NSHomeDirectory()
     }
-
-    // 库路径
-    public static var library: ExFilePath {
-        return ExFilePath(NSHomeDirectory() + "/Library")
+    
+    public static var documentsPath: String {
+        return NSHomeDirectory().appendPath("Documents")
     }
-
-    // Bundle路径
-    public static var bundle: ExFilePath {
-        let bundle = Bundle.main
-        return ExFilePath(bundle.bundlePath)
+    
+    public static var libraryPath: String {
+        return NSHomeDirectory().appendPath("Library")
     }
-
-    public var pathComponents: [String] {
-        return (fullPath as NSString).pathComponents
+    
+    public static var bundlePath : String {
+        return Bundle.main.bundlePath
     }
-
+    
+    public func appendPath(_ path:String) -> String {
+        if self.hasSuffix("/") {
+            if path.hasPrefix("/") {
+                return self + (path[1...] ?? "")
+            } else {
+                return self + path
+            }
+        } else {
+            if path.hasPrefix("/") {
+                return self + path
+            } else {
+                return self + "/" + path
+            }
+        }
+    }
+    
+    public var pathComponents:[String] {
+        return (self as NSString).pathComponents
+    }
+    
     public var pathExtension: String {
-        return (fullPath as NSString).pathExtension
+        return (self as NSString).pathExtension
     }
-
+    
     public var lastPathComponent: String {
-        return (fullPath as NSString).lastPathComponent
+        return (self as NSString).lastPathComponent
     }
-
+    
     public var lastPathMainbody: String {
         let component = lastPathComponent
         if let index = component.lastIndex(of: ".") {
             return String(component[..<index])
         }
         return component
-    }
-
-    public func addComponent(string: String) {
-        fullPath = (fullPath as NSString).appendingPathComponent(string)
-    }
-
-    public func addComponented(string: String) -> String {
-        return (fullPath as NSString).appendingPathComponent(string)
-    }
-}
-
-public func ex_url(_ string: String) -> URL? {
-    if string.hasPrefix("http") {
-        return URL(string: string)
-    } else {
-        return URL(fileURLWithPath: string)
     }
 }
