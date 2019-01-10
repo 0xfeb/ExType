@@ -23,36 +23,86 @@ public extension String {
         return String(data: data, encoding: String.Encoding.utf8)
     }
 
-    public func regexMatch(text: String) -> [String]? {
-        if let expression = try? NSRegularExpression(pattern: self, options: .caseInsensitive) {
+    public func regex(text: String) -> [String]? {
+        if let expression = try? NSRegularExpression(pattern: self, options: [.anchorsMatchLines]) {
             let range = NSRange(location: 0, length: text.count)
-            let matches = expression.matches(in: text, options: .anchored, range: range)
-            return matches.map({ (item) in
-                let range = item.range
-                let startIndex = text.index(text.startIndex, offsetBy: range.location)
-                let endIndex = text.index(text.startIndex, offsetBy: range.location+range.length)
-                return String(text[startIndex..<endIndex])
-            })
+            let matches = expression.matches(in: text, options: [], range: range)
+            var result:[String] = []
+            for item in matches {
+                for n in 0..<item.numberOfRanges {
+                    let range = item.range(at: n)
+                    let startIndex = text.index(text.startIndex, offsetBy: range.location)
+                    let endIndex = text.index(text.startIndex, offsetBy: range.location+range.length)
+                    result.append(String(text[startIndex..<endIndex]))
+                }
+            }
+            result.remove(at: 0)
+            return result
         }
         return nil
+    }
+    
+    public func isMatch(text:String) -> Bool {
+        guard let expression = try? NSRegularExpression(pattern: self, options: [.anchorsMatchLines]) else { return false }
+        
+        let range = NSRange(location: 0, length: text.count)
+        return expression.firstMatch(in: text, options: [], range: range) != nil
+    }
+    
+    public func regexOutput(source:String, templete:String) -> String? {
+        guard let expression = try? NSRegularExpression(pattern: self, options: [.anchorsMatchLines]) else { return nil }
+        
+        let range = NSRange(location: 0, length: source.count)
+        return expression.stringByReplacingMatches(in: source, options: [], range: range, withTemplate: templete)
     }
 
     public var trimed : String {
         return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
-    public func index(of offset: Int) -> String.Index {
-        return self.index(self.startIndex, offsetBy: offset)
+    public func index(at offset: Int) -> String.Index? {
+        guard let result = self.index(self.startIndex, offsetBy: offset, limitedBy: self.endIndex) else { return nil }
+        if result < self.startIndex { return nil }
+        return result
     }
     
-    public subscript(_ range: Range<Int>) -> String {
-        let start = index(of: range.lowerBound)
-        let end = index(of: range.upperBound)
+    public var jsonDictionary:[String : Any]? {
+        if let data = self.data(using: String.Encoding.utf8) {
+            if let dict = try? JSONSerialization.jsonObject(with: data, options: []) {
+                return dict as? [String: Any]
+            }
+        }
+        
+        return nil
+    }
+    
+    public subscript(_ range: Range<Int>) -> String? {
+        guard let start = index(at: range.lowerBound),
+            let end = index(at: range.upperBound) else { return nil }
         return String(self[start..<end])
     }
     
-    public var dict:[String: Any]? {
-        return ex_json(text: self)
+    public subscript(_ range: ClosedRange<Int>) -> String? {
+        guard let start = index(at: range.lowerBound),
+            let end = index(at: range.upperBound) else { return nil }
+        return String(self[start...end])
+    }
+    
+    public subscript(_ range: PartialRangeFrom<Int>) -> String? {
+        guard let start = index(at: range.lowerBound) else { return nil }
+        return String(self[start...])
+    }
+    
+    public subscript(_ range: PartialRangeUpTo<Int>) -> String? {
+        guard let end = index(at: range.upperBound) else { return nil }
+        return String(self[..<end])
+    }
+    
+    public subscript(_ position: Int) -> Character? {
+        if let index = self.index(self.startIndex, offsetBy: position, limitedBy: self.endIndex), index != endIndex {
+            return self[index]
+        }
+        return nil
     }
     
     public func split(size:Int) -> [String] {
@@ -67,13 +117,29 @@ public extension String {
     public func split(_ seperater:String, limit:Int) -> [String] {
         if limit < 2 { return [self] }
         
-        let c = self.components(separatedBy: seperater)
-        if c.count <= limit { return c }
+        var result:[String] = []
+        var current:String = ""
         
-        var result = c[..<(limit-1)]
-        result.append(c[(limit-1)...].joined(separator: seperater))
+        for c in self {
+            if result.count == limit - 1 {
+                current.append(c)
+            } else {
+                if seperater.contains(c) {
+                    if current.count > 0 {
+                        result.append(current)
+                        current = ""
+                    }
+                } else {
+                    current.append(c)
+                }
+            }
+        }
         
-        return Array(result)
+        if current.trim(characters: seperater).count > 0 {
+            result.append(current)
+        }
+        
+        return result
     }
     
     public func subString(from:Int, size:Int) -> String? {
@@ -84,13 +150,6 @@ public extension String {
         let indexHigh = index(indexLow, offsetBy: size, limitedBy: endIndex) ?? endIndex
         
         return String(self[indexLow..<indexHigh])
-    }
-    
-    public func char(at position:Int) -> Character? {
-        if let index = self.index(self.startIndex, offsetBy: position, limitedBy: self.endIndex), index != endIndex {
-            return self[index]
-        }
-        return nil
     }
     
     public func fixFront(fix:Character, textLength:Int) -> String {
@@ -163,16 +222,28 @@ public extension String {
     public func trimRight(characters:String = " ") -> String {
         return String(String(self.reversed()).trimLeft(characters:characters).reversed())
     }
-}
-
-public func ex_uuid() -> String {
-    let puuid = CFUUIDCreate(nil)
-    if let suuid = CFUUIDCreateString(nil, puuid) {
-        return "\(suuid)"
-    } else {
-        let random0 = ex_random(lower: UInt64(0))
-        let random1 = ex_random(lower: UInt64(0))
-        let random2 = ex_random(lower: UInt64(0))
-        return "\(random0)"+"\(random1)"+"\(random2)"
+    
+    public func removed(at position:Int) -> String {
+        guard let index = self.index(at: position) else { return self }
+        if index < self.startIndex || index >= self.endIndex { return self }
+        
+        var result = self
+        result.remove(at: index)
+        
+        return result
+    }
+    
+    public func removed(at positions:[Int]) throws -> String {
+        var result = self
+        for position in positions.sorted(by: >) {
+            guard let index = self.index(at: position) else { continue }
+            if index < self.startIndex || index >= self.endIndex { continue }
+            
+            result.remove(at: index)
+        }
+        
+        return result
     }
 }
+
+
