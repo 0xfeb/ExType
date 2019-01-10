@@ -8,78 +8,19 @@
 
 import Foundation
 
-public extension Int {
-    public var chineseDescription: String {
-        if self > 100_000_000 {
-            let number = Float(self) / 100_000_000
-            return String(format: "%.1f亿", number)
-        } else if self > 10_000 {
-            let number = Float(self) / 10_000
-            return String(format: "%.1f万", number)
-        } else if self > 1_000 {
-            let number = Float(self) / 1_000
-            return String(format: "%.0f千", number)
-        } else {
-            return "\(self)"
-        }
-    }
-}
-
-public extension Comparable {
-    public mutating func limit(_ min: Self, _ max: Self) {
-        if self < min { self = min }
-        if self > max { self = max }
-    }
-    
-    public func limited(_ min: Self, _ max: Self) -> Self {
-        if self < min { return min }
-        if self > max { return max }
-        return self
-    }
-}
-
-public extension Range where Bound: SignedInteger & UnsignedInteger {
-    public init(incStart: Bound, incEnd: Bound) {
-        self.init(uncheckedBounds: (incStart, incEnd))
-    }
-
-    public init(incStart: Bound, excEnd: Bound) {
-        self.init(uncheckedBounds: (incStart, excEnd-1))
-    }
-
-    public init(excStart: Bound, incEnd: Bound) {
-        self.init(uncheckedBounds: (excStart+1, incEnd))
-    }
-
-    public init(excStart: Bound, excEnd: Bound) {
-        self.init(uncheckedBounds: (excStart+1, excEnd-1))
-    }
-}
-
-public extension Collection {
-    public func keep(op:(Element)->Bool) -> [Element] {
-        var result:[Element] = []
-        for n in self {
-            if op(n) {
-                result.append(n)
-            }
-        }
-        return result
-    }
-    
-    public func discard(op:(Element)->Bool) -> [Element] {
-        var result:[Element] = []
-        for n in self {
-            if !op(n) {
-                result.append(n)
-            }
-        }
-        return result
-    }
-}
-
-
-public func ex_set<T>(_ item: T, _ action: (T) -> Void) -> T {
-    action(item)
+public func setup<T>(_ item: T, _ action: (T) throws -> Void) rethrows -> T {
+    try action(item)
     return item
+}
+
+public func UUID() -> String {
+    let puuid = CFUUIDCreate(nil)
+    if let suuid = CFUUIDCreateString(nil, puuid) {
+        return "\(suuid)"
+    } else {
+        let random0 = UInt64.random(in: 0...UInt64.max )
+        let random1 = UInt64.random(in: 0...UInt64.max )
+        let random2 = UInt64.random(in: 0...UInt64.max )
+        return "\(random0)"+"\(random1)"+"\(random2)"
+    }
 }
