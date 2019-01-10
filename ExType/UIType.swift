@@ -8,7 +8,7 @@
 
 import UIKit
 
-let apartText = "%"
+fileprivate let apartText = "%"
 
 public extension UIFont {
     public convenience init?(text:String) {
