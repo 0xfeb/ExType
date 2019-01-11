@@ -171,7 +171,7 @@ public extension Collection {
         return result
     }
     
-    public func forEach(near predicate:(_ item:NearItem<Self.Element>) throws -> ()) rethrows {
+    public func forEachNear(_ predicate:(_ item:NearItem<Self.Element>) throws -> ()) rethrows {
         for n in stride(from: 0, to: count, by: 1) {
             let item = NearItem(self.value(at: self.index(self.startIndex, offsetBy: n-1)),
                                 self[self.index(self.startIndex, offsetBy: n)],
@@ -199,14 +199,14 @@ public struct EnumItem<T:Numeric> {
 }
 
 public extension Collection where Element : Numeric {
-    public func forEach(score:(EnumItem<Element>) throws ->()) rethrows {
+    public func forEachScore(_ predicate:(EnumItem<Element>) throws ->()) rethrows {
         let total = self.reduce(0, +)
         var used:Self.Element = 0
         var n = 0
         try self.forEach{ (elem) in
             used += elem
             let t = EnumItem(index: n, element: elem, amount: used, total: total)
-            try score(t)
+            try predicate(t)
             n += 1
         }
     }

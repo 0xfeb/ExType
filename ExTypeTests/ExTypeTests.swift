@@ -258,13 +258,13 @@ class ExTypeTests: XCTestCase {
     func testForEach() {
         let list = [1,2,1,2,3,4,3,4,1,2,3,4,1,2,3,4]
         var amountList:[Int] = []
-        list.forEach(score: { (item) in
+        list.forEachScore({ (item) in
             amountList.append(item.amount)
         })
         XCTAssertEqual([1,3,4,6,9,13,16,20,21,23,26,30,31,33,36,40], amountList)
         XCTAssertTrue([NearItem(nil,1,2), NearItem(1,2,3), NearItem(2,3,4), NearItem(3,4,nil)] == [1,2,3,4].nearList)
         var result:[Int?] = []
-        [1,2,3,4].forEach(near: {
+        [1,2,3,4].forEachNear({
             result.append($0.prev)
         })
         XCTAssertEqual([nil, 1, 2, 3], result)
