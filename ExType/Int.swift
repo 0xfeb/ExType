@@ -46,6 +46,18 @@ public extension Int {
         self = total
     }
     
+    public var hexString:String {
+        let fix = "0123456789ABCDEF"
+        var result:String = ""
+        var left = self
+        while left > 0 {
+            let c = left % 16
+            left = left / 16
+            result.insert(fix[c]!, at: result.startIndex)
+        }
+        return result
+    }
+    
     public init(nearUp upbound:Double) {
         let c = Int(upbound)
         self = (upbound - Double(c) > 0) ? (c + 1) : c
