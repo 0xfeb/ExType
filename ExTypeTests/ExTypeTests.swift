@@ -234,7 +234,7 @@ class ExTypeTests: XCTestCase {
     }
     
     func testMapDict() {
-        XCTAssertEqual(["1":1, "2":2, "3":3], [1,2,3].map(toDict: { (String($0), $0) }))
+        XCTAssertEqual(["1":1, "2":2, "3":3], [1,2,3].mapDict( { (String($0), $0) }))
     }
     
     func testSkipIndex() {

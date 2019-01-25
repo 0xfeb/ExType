@@ -39,7 +39,7 @@ public extension Collection {
         return self[index]
     }
     
-    public func map<Key, Value>(toDict predicate: (Element) throws -> (Key, Value)) rethrows -> [Key: Value] {
+    public func mapDict<Key, Value>(_ predicate: (Element) throws -> (Key, Value)) rethrows -> [Key: Value] {
         var result: [Key: Value] = [:]
         
         for item in self {
