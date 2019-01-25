@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   Types converter , builder , help tools. Easy library for types extra usage. 
                    DESC
 
-  s.homepage     = "https://gitee.com/clstd/ExType"
+  s.homepage     = "https://github.com/0xfeb/ExType.git"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -82,7 +82,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "git@gitee.com:clstd/ExType.git", :tag => "#{s.version}" }
+  s.source       = { :git => "git@github.com:0xfeb/ExType.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
