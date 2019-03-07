@@ -23,7 +23,7 @@ class ExTypeTests: XCTestCase {
 
     func testIntNearUp() {
         XCTAssertEqual(45, Int(nearUp: 44.2))
-        XCTAssertEqual(45, Int(nearUp: 45))
+        XCTAssertEqual(45, Int(nearUp: 45.0))
         XCTAssertEqual(45, Int(nearUp: 44.8))
     }
     
@@ -118,6 +118,28 @@ class ExTypeTests: XCTestCase {
     func testIndex() {
         XCTAssertEqual(5, "abcdefg".index(at: 5)!.encodedOffset)
         XCTAssertNil("abcdefg".index(at: 8))
+    }
+    
+    func testFind() {
+        let text = "五千六百四十一万零七亿四千万六千七百二十二"
+        XCTAssertEqual(["五", "六百四十一万零七亿四", "万六", "七百二十二"], text.find("千"))
+        XCTAssertEqual(["五", "六百四十一万零七亿四千万六千七百二十二"], text.findFirst("千"))
+        XCTAssertEqual(["五千六百四十一万零七亿四千万六", "七百二十二"], text.findLast("千"))
+        XCTAssertEqual(["测试"], "测试".find("亿"))
+        XCTAssertEqual(["测试"], "测试".findFirst("亿"))
+        XCTAssertEqual(["测试"], "测试".findLast("亿"))
+        XCTAssertEqual(["测试", ""], "测试亿".find("亿"))
+        XCTAssertEqual(["测试", ""], "测试亿".findFirst("亿"))
+        XCTAssertEqual(["测试", ""], "测试亿".findLast("亿"))
+        XCTAssertEqual(["", "测试"], "亿测试".find("亿"))
+        XCTAssertEqual(["", "测试"], "亿测试".findFirst("亿"))
+        XCTAssertEqual(["", "测试"], "亿测试".findLast("亿"))
+        XCTAssertEqual(["", "测试", ""], "亿测试亿".find("亿"))
+        XCTAssertEqual(["", "测试亿"], "亿测试亿".findFirst("亿"))
+        XCTAssertEqual(["亿测试", ""], "亿测试亿".findLast("亿"))
+        XCTAssertEqual(["A", "测试", "A"], "A亿测试亿A".find("亿"))
+        XCTAssertEqual(["A", "测试亿A"], "A亿测试亿A".findFirst("亿"))
+        XCTAssertEqual(["A亿测试", "A"], "A亿测试亿A".findLast("亿"))
     }
     
     func testSubscript() {

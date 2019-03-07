@@ -244,6 +244,79 @@ public extension String {
         
         return result
     }
+    
+    public func find(_ text:String) -> [String] {
+        return self.components(separatedBy: text)
+    }
+    
+    private func apartIn(pos:Int, count:Int) -> [String] {
+        if pos == 0 {
+            return ["", self[count...] ?? self]
+        } else if pos >= self.count - count {
+            return [self[..<pos] ?? self, ""]
+        } else {
+            return [
+                self[..<pos] ?? self,
+                self[(pos+count)...] ?? self
+            ]
+        }
+    }
+    
+    public func testF(_ text:String) -> Int? {
+        var loc:Int?
+        let leftCount = self.count - text.count
+        for n in (0...leftCount).reversed() {
+            let start = n-text.count+1
+            let end = start + text.count
+            let sub = self[start..<end]
+            if sub == text {
+                loc = n
+                break
+            }
+        }
+        
+        return loc
+    }
+    
+    public func findFirst(_ text:String) -> [String] {
+        let leftCount = self.count - text.count
+        if leftCount <= 0 {
+            return [self]
+        }
+        
+        var loc:Int?
+        for n in 0...leftCount {
+            let sub = self[n..<(n+text.count)]
+            if sub == text {
+                loc = n
+                break
+            }
+        }
+        
+        guard let apartLoc:Int = loc else { return [self] }
+        return apartIn(pos: apartLoc, count: text.count)
+    }
+    
+    public func findLast(_ text:String) -> [String] {
+        let leftCount = self.count - text.count
+        if leftCount <= 0 {
+            return [self]
+        }
+        
+        var loc:Int?
+        for n in (0...leftCount).reversed() {
+            let start = n-text.count+1
+            let end = start + text.count
+            let sub = self[start..<end]
+            if sub == text {
+                loc = n
+                break
+            }
+        }
+        
+        guard let apartLoc = loc else { return [self] }
+        return apartIn(pos: apartLoc, count: text.count)
+    }
 }
 
 
