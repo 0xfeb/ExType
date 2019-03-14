@@ -126,7 +126,7 @@ class ExTypeTests: XCTestCase {
         XCTAssertEqual(["五", "六百四十一万零七亿四千万六千七百二十二"], text.findFirst("千"))
         XCTAssertEqual(["五千六百四十一万零七亿四千万六", "七百二十二"], text.findLast("千"))
         XCTAssertEqual(["测试"], "测试".find("亿"))
-        XCTAssertEqual(["测试"], "测试".findFirst("亿"))
+        XCTAssertEqual(["一百五十"], "一百五十".findFirst("亿"))
         XCTAssertEqual(["测试"], "测试".findLast("亿"))
         XCTAssertEqual(["测试", ""], "测试亿".find("亿"))
         XCTAssertEqual(["测试", ""], "测试亿".findFirst("亿"))
