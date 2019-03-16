@@ -26,7 +26,7 @@ public extension Date {
             
             if ISOString.contains(":") {
                 options.insert(.withColonSeparatorInTime)
-                options.insert(.withFullTime)
+                options.insert(.withTime)
             }
             
             if ISOString.contains(" ") {
