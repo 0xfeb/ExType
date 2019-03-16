@@ -26,11 +26,15 @@ public extension Date {
             
             if ISOString.contains(":") {
                 options.insert(.withColonSeparatorInTime)
-                options.insert(.withFullDate)
+                options.insert(.withFullTime)
             }
             
             if ISOString.contains(" ") {
                 options.insert(.withSpaceBetweenDateAndTime)
+            }
+            
+            if ISOString.contains("+") {
+                options.insert(.withTimeZone)
             }
             
             return options
