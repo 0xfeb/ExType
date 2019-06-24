@@ -8,22 +8,22 @@
 
 import Foundation
 
-public extension String {
-    public var md5: String {
+extension String {
+    var md5: String {
         return MD5(self)
     }
 
-    public var base64Encoded: String? {
+    var base64Encoded: String? {
         let data = self.data(using: String.Encoding.utf8)
         return data?.base64EncodedString(options: [])
     }
 
-    public var base64Decoded: String? {
+    var base64Decoded: String? {
         guard let data = Data(base64Encoded: self, options: []) else { return nil }
         return String(data: data, encoding: String.Encoding.utf8)
     }
 
-    public func regex(text: String) -> [String]? {
+    func regex(text: String) -> [String]? {
         if let expression = try? NSRegularExpression(pattern: self, options: [.anchorsMatchLines]) {
             let range = NSRange(location: 0, length: text.count)
             let matches = expression.matches(in: text, options: [], range: range)
@@ -42,31 +42,36 @@ public extension String {
         return nil
     }
     
-    public func isMatch(text:String) -> Bool {
+    func replace(range:NSRange, text:StringLiteralType) -> String {
+        let mutString = NSMutableString(string: self)
+        return mutString.replacingCharacters(in: range, with: text)
+    }
+    
+    func isMatch(text:String) -> Bool {
         guard let expression = try? NSRegularExpression(pattern: self, options: [.anchorsMatchLines]) else { return false }
         
         let range = NSRange(location: 0, length: text.count)
         return expression.firstMatch(in: text, options: [], range: range) != nil
     }
     
-    public func regexOutput(source:String, templete:String) -> String? {
+    func regexOutput(source:String, templete:String) -> String? {
         guard let expression = try? NSRegularExpression(pattern: self, options: [.anchorsMatchLines]) else { return nil }
         
         let range = NSRange(location: 0, length: source.count)
         return expression.stringByReplacingMatches(in: source, options: [], range: range, withTemplate: templete)
     }
 
-    public var trimed : String {
+    var trimed : String {
         return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
-    public func index(at offset: Int) -> String.Index? {
+    func index(at offset: Int) -> String.Index? {
         guard let result = self.index(self.startIndex, offsetBy: offset, limitedBy: self.endIndex) else { return nil }
         if result < self.startIndex { return nil }
         return result
     }
     
-    public var jsonDictionary:[String : Any]? {
+    var jsonDictionary:[String : Any]? {
         if let data = self.data(using: String.Encoding.utf8) {
             if let dict = try? JSONSerialization.jsonObject(with: data, options: []) {
                 return dict as? [String: Any]
@@ -76,36 +81,36 @@ public extension String {
         return nil
     }
     
-    public subscript(_ range: Range<Int>) -> String? {
+    subscript(_ range: Range<Int>) -> String? {
         guard let start = index(at: range.lowerBound),
             let end = index(at: range.upperBound) else { return nil }
         return String(self[start..<end])
     }
     
-    public subscript(_ range: ClosedRange<Int>) -> String? {
+    subscript(_ range: ClosedRange<Int>) -> String? {
         guard let start = index(at: range.lowerBound),
             let end = index(at: range.upperBound) else { return nil }
         return String(self[start...end])
     }
     
-    public subscript(_ range: PartialRangeFrom<Int>) -> String? {
+    subscript(_ range: PartialRangeFrom<Int>) -> String? {
         guard let start = index(at: range.lowerBound) else { return nil }
         return String(self[start...])
     }
     
-    public subscript(_ range: PartialRangeUpTo<Int>) -> String? {
+    subscript(_ range: PartialRangeUpTo<Int>) -> String? {
         guard let end = index(at: range.upperBound) else { return nil }
         return String(self[..<end])
     }
     
-    public subscript(_ position: Int) -> Character? {
+    subscript(_ position: Int) -> Character? {
         if let index = self.index(self.startIndex, offsetBy: position, limitedBy: self.endIndex), index != endIndex {
             return self[index]
         }
         return nil
     }
     
-    public func split(size:Int) -> [String] {
+    func split(size:Int) -> [String] {
         if size < 1 { return [self] }
         
         return stride(from: 0, to: self.count, by: size)
@@ -114,7 +119,7 @@ public extension String {
             })
     }
     
-    public func split(_ seperater:String, limit:Int) -> [String] {
+    func split(_ seperater:String, limit:Int) -> [String] {
         if limit < 2 { return [self] }
         
         var result:[String] = []
@@ -142,7 +147,7 @@ public extension String {
         return result
     }
     
-    public func subString(from:Int, size:Int) -> String? {
+    func subString(from:Int, size:Int) -> String? {
         guard let indexLow = index(startIndex, offsetBy: from, limitedBy: endIndex), indexLow != endIndex else {
             return nil
         }
@@ -152,7 +157,7 @@ public extension String {
         return String(self[indexLow..<indexHigh])
     }
     
-    public func fixFront(fix:Character, textLength:Int) -> String {
+    func fixFront(fix:Character, textLength:Int) -> String {
         let fixSize = textLength - count
         if fixSize > 0 {
             return String(repeating: fix, count: fixSize) + self
@@ -161,7 +166,7 @@ public extension String {
         }
     }
     
-    public func fixBack(fix:Character, textLength:Int) -> String {
+    func fixBack(fix:Character, textLength:Int) -> String {
         let fixSize = textLength - count
         if fixSize > 0 {
             return self + String(repeating: fix, count: fixSize)
@@ -170,7 +175,7 @@ public extension String {
         }
     }
     
-    public func isFormat(start:Character?, middle:String?, end:Character?) -> Bool {
+    func isFormat(start:Character?, middle:String?, end:Character?) -> Bool {
         for (index, char) in self.enumerated() {
             if index == 0 {
                 if let start = start {
@@ -189,20 +194,20 @@ public extension String {
         return true
     }
     
-    public func count(_ character:Character) -> UInt {
+    func count(_ character:Character) -> UInt {
         return self.reduce(UInt(0), { $0 + ($1 == character ? 1 : 0) })
     }
     
-    public func count(check: (Character) throws ->Bool ) rethrows -> UInt {
+    func count(check: (Character) throws ->Bool ) rethrows -> UInt {
         return try self.reduce(UInt(0), { $0 + (try check($1) ? 1 : 0) })
     }
     
-    public func trim(characters:String = " ") -> String {
+    func trim(characters:String = " ") -> String {
         return trimLeft(characters: characters)
             .trimRight(characters: characters)
     }
     
-    public func trimLeft(characters:String = " ") -> String {
+    func trimLeft(characters:String = " ") -> String {
         var offset = self.startIndex
         for (index, char) in self.enumerated() {
             if characters.contains(char) {
@@ -219,11 +224,11 @@ public extension String {
         }
     }
     
-    public func trimRight(characters:String = " ") -> String {
+    func trimRight(characters:String = " ") -> String {
         return String(String(self.reversed()).trimLeft(characters:characters).reversed())
     }
     
-    public func removed(at position:Int) -> String {
+    func removed(at position:Int) -> String {
         guard let index = self.index(at: position) else { return self }
         if index < self.startIndex || index >= self.endIndex { return self }
         
@@ -233,7 +238,7 @@ public extension String {
         return result
     }
     
-    public func removed(at positions:[Int]) throws -> String {
+    func removed(at positions:[Int]) throws -> String {
         var result = self
         for position in positions.sorted(by: >) {
             guard let index = self.index(at: position) else { continue }
@@ -245,7 +250,7 @@ public extension String {
         return result
     }
     
-    public func find(_ text:String) -> [String] {
+    func find(_ text:String) -> [String] {
         return self.components(separatedBy: text)
     }
     
@@ -262,7 +267,7 @@ public extension String {
         }
     }
     
-    public func testF(_ text:String) -> Int? {
+    func testF(_ text:String) -> Int? {
         var loc:Int?
         let leftCount = self.count - text.count
         for n in (0...leftCount).reversed() {
@@ -278,7 +283,7 @@ public extension String {
         return loc
     }
     
-    public func findFirst(_ text:String) -> [String] {
+    func findFirst(_ text:String) -> [String] {
         let leftCount = self.count - text.count
         if leftCount <= 0 {
             return [self]
@@ -297,7 +302,7 @@ public extension String {
         return apartIn(pos: apartLoc, count: text.count)
     }
     
-    public func findLast(_ text:String) -> [String] {
+    func findLast(_ text:String) -> [String] {
         let leftCount = self.count - text.count
         if leftCount <= 0 {
             return [self]
