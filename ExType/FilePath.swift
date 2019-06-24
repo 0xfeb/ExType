@@ -8,8 +8,8 @@
 
 import Foundation
 
-public extension String {
-    public var existsDirectory:Bool {
+extension String {
+    var existsDirectory:Bool {
         if let attr = try? FileManager.default.attributesOfItem(atPath: self),
             let type = attr[FileAttributeKey.type] as? FileAttributeType {
             return type == .typeDirectory
@@ -18,7 +18,7 @@ public extension String {
         return false
     }
     
-    public var existsFile:Bool {
+    var existsFile:Bool {
         if let attr = try? FileManager.default.attributesOfItem(atPath: self),
             let type = attr[FileAttributeKey.type] as? FileAttributeType {
             return type == .typeRegular
@@ -27,7 +27,7 @@ public extension String {
         return false
     }
     
-    public var subPaths:[String] {
+    var subPaths:[String] {
         if let itor = FileManager.default.enumerator(at: URL(fileURLWithPath: self),
                                                      includingPropertiesForKeys: nil,
                                                      options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants],
@@ -40,7 +40,7 @@ public extension String {
         return []
     }
     
-    public var subDeepPaths:[String] {
+    var subDeepPaths:[String] {
         if let itor = FileManager.default.enumerator(at: URL(fileURLWithPath: self),
                                                      includingPropertiesForKeys: nil,
                                                      options: [.skipsHiddenFiles],
@@ -53,33 +53,33 @@ public extension String {
         return []
     }
     
-    public func createDirectory() throws {
+    func createDirectory() throws {
         try FileManager.default.createDirectory(atPath: self,
                                                 withIntermediateDirectories: true,
                                                 attributes: nil)
     }
     
-    public func removePath() throws {
+    func removePath() throws {
         try FileManager.default.removeItem(atPath: self)
     }
     
-    public static var homePath: String {
+    static var homePath: String {
         return NSHomeDirectory()
     }
     
-    public static var documentsPath: String {
+    static var documentsPath: String {
         return NSHomeDirectory().appendPath("Documents")
     }
     
-    public static var libraryPath: String {
+    static var libraryPath: String {
         return NSHomeDirectory().appendPath("Library")
     }
     
-    public static var bundlePath : String {
+    static var bundlePath : String {
         return Bundle.main.bundlePath
     }
     
-    public func appendPath(_ path:String) -> String {
+    func appendPath(_ path:String) -> String {
         if self.hasSuffix("/") {
             if path.hasPrefix("/") {
                 return self + (path[1...] ?? "")
@@ -95,19 +95,19 @@ public extension String {
         }
     }
     
-    public var pathComponents:[String] {
+    var pathComponents:[String] {
         return (self as NSString).pathComponents
     }
     
-    public var pathExtension: String {
+    var pathExtension: String {
         return (self as NSString).pathExtension
     }
     
-    public var lastPathComponent: String {
+    var lastPathComponent: String {
         return (self as NSString).lastPathComponent
     }
     
-    public var lastPathMainbody: String {
+    var lastPathMainbody: String {
         let component = lastPathComponent
         if let index = component.lastIndex(of: ".") {
             return String(component[..<index])

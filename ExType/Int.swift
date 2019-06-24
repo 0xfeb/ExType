@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension Int {
+extension Int {
     //support chinese number in hex text
     private init(hex: Character) {
         switch hex {
@@ -32,7 +32,7 @@ public extension Int {
         }
     }
     
-    public init(hex: String) {
+    init(hex: String) {
         var total: Int = 0
         for char in hex {
             let charInt: Int = Int(hex: char)
@@ -46,7 +46,7 @@ public extension Int {
         self = total
     }
     
-    public var hexString:String {
+    var hexString:String {
         let fix = "0123456789ABCDEF"
         var result:String = ""
         var left = self
@@ -58,44 +58,44 @@ public extension Int {
         return result
     }
     
-    public init(nearUp upbound:Double) {
+    init(nearUp upbound:Double) {
         let c = Int(upbound)
         self = (upbound - Double(c) > 0) ? (c + 1) : c
     }
     
-    public init(nearDown downbound:Double) {
+    init(nearDown downbound:Double) {
         self = Int(downbound)
     }
     
-    public init(nearCenter center:Double) {
+    init(nearCenter center:Double) {
         let c = Int(center)
         self = (center - Double(c) >= 0.5) ? (c + 1) : c
     }
     
-    public init(nearUp upbound:Float) {
+    init(nearUp upbound:Float) {
         let c = Int(upbound)
         self = (upbound - Float(c) > 0) ? (c + 1) : c
     }
     
-    public init(nearDown downbound:Float) {
+    init(nearDown downbound:Float) {
         self = Int(downbound)
     }
     
-    public init(nearCenter center:Float) {
+    init(nearCenter center:Float) {
         let c = Int(center)
         self = (center - Float(c) >= 0.5) ? (c + 1) : c
     }
     
-    public init(nearUp upbound:CGFloat) {
+    init(nearUp upbound:CGFloat) {
         let c = Int(upbound)
         self = (upbound - CGFloat(c) > 0) ? (c + 1) : c
     }
     
-    public init(nearDown downbound:CGFloat) {
+    init(nearDown downbound:CGFloat) {
         self = Int(downbound)
     }
     
-    public init(nearCenter center:CGFloat) {
+    init(nearCenter center:CGFloat) {
         let c = Int(center)
         self = (center - CGFloat(c) >= 0.5) ? (c + 1) : c
     }
@@ -107,7 +107,7 @@ public extension Int {
         self = nig ? (0 - value) : value
     }
     
-    public var chineseDescription: String {
+    var chineseDescription: String {
         if self >= 100_000_000 {
             let number = Float(self) / 100_000_000
             if number == Float(Int(number)) {

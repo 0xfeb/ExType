@@ -9,7 +9,7 @@
 import Foundation
 
 public extension URL {
-    public init?(auto string:String) {
+    init?(auto string:String) {
         if let url = string.hasPrefix("http") ? URL(string: string) : URL(fileURLWithPath: string) {
             self = url
         } else {

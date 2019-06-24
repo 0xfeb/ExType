@@ -9,7 +9,7 @@
 import Foundation
 
 public extension Dictionary {
-    public var jsonString: String? {
+    var jsonString: String? {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: []) else { return nil }
         let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)
         return jsonString

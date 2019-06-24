@@ -8,16 +8,16 @@
 
 import Foundation
 
-public enum CollectionError : Error {
+enum CollectionError : Error {
     case invalidIndex
 }
 
-public struct NearItem<T> {
-    public var prev:T?
-    public var current:T
-    public var next:T?
+struct NearItem<T> {
+    var prev:T?
+    var current:T
+    var next:T?
     
-    public init(_ prev:T?, _ current:T, _ next:T?) {
+    init(_ prev:T?, _ current:T, _ next:T?) {
         self.prev = prev
         self.current = current
         self.next = next
@@ -25,13 +25,13 @@ public struct NearItem<T> {
 }
 
 extension NearItem : Equatable where T:Equatable {
-    public static func == (lhs: NearItem<T>, rhs: NearItem<T>) -> Bool {
+    static func == (lhs: NearItem<T>, rhs: NearItem<T>) -> Bool {
         return lhs.prev==rhs.prev && lhs.current==rhs.current && lhs.next==rhs.next
     }
 }
 
-public extension Collection {
-    public func value(at index:Self.Index) -> Element? {
+extension Collection {
+    func value(at index:Self.Index) -> Element? {
         if index < self.startIndex || index >= self.endIndex {
             return nil
         }
@@ -39,7 +39,7 @@ public extension Collection {
         return self[index]
     }
     
-    public func mapDict<Key, Value>(_ predicate: (Element) throws -> (Key, Value)) rethrows -> [Key: Value] {
+    func mapDict<Key, Value>(_ predicate: (Element) throws -> (Key, Value)) rethrows -> [Key: Value] {
         var result: [Key: Value] = [:]
         
         for item in self {
@@ -50,20 +50,20 @@ public extension Collection {
         return result
     }
     
-    public var tuple2:(Element, Element)? {
+    var tuple2:(Element, Element)? {
         if self.count < 2 { return nil }
         return (self[self.startIndex],
                 self[self.index(self.startIndex, offsetBy: 1)])
     }
     
-    public var tuple3:(Element, Element, Element)? {
+    var tuple3:(Element, Element, Element)? {
         if self.count < 3 { return nil }
         return (self[self.startIndex],
                 self[self.index(self.startIndex, offsetBy: 1)],
                 self[self.index(self.startIndex, offsetBy: 2)])
     }
     
-    public var tuple4:(Element, Element, Element, Element)? {
+    var tuple4:(Element, Element, Element, Element)? {
         if self.count < 4 { return nil }
         return (self[self.startIndex],
                 self[self.index(self.startIndex, offsetBy: 1)],
@@ -71,7 +71,7 @@ public extension Collection {
                 self[self.index(self.startIndex, offsetBy: 3)])
     }
     
-    public var tuple5:(Element, Element, Element, Element, Element)? {
+    var tuple5:(Element, Element, Element, Element, Element)? {
         if self.count < 5 { return nil }
         return (self[self.startIndex],
                 self[self.index(self.startIndex, offsetBy: 1)],
@@ -80,7 +80,7 @@ public extension Collection {
                 self[self.index(self.startIndex, offsetBy: 4)])
     }
     
-    public var tuple6:(Element, Element, Element, Element, Element, Element)? {
+    var tuple6:(Element, Element, Element, Element, Element, Element)? {
         if self.count < 6 { return nil }
         return (self[self.startIndex],
                 self[self.index(self.startIndex, offsetBy: 1)],
@@ -90,7 +90,7 @@ public extension Collection {
                 self[self.index(self.startIndex, offsetBy: 5)])
     }
     
-    public func firstIndex(skip:Int, where predicate:(Element) throws ->Bool) rethrows -> Self.Index? {
+    func firstIndex(skip:Int, where predicate:(Element) throws ->Bool) rethrows -> Self.Index? {
         var skiped = 0
         for n in self.indices {
             let item = self[n]
@@ -105,7 +105,7 @@ public extension Collection {
         return nil
     }
     
-    public func lastIndex(skip:Int, where predicate:(Element) throws ->Bool) rethrows -> Self.Index? {
+    func lastIndex(skip:Int, where predicate:(Element) throws ->Bool) rethrows -> Self.Index? {
         var skiped = 0
         for n in self.indices.reversed() {
             let item = self[n]
@@ -120,7 +120,7 @@ public extension Collection {
         return nil
     }
     
-    public func group(isEqual:(_ lhs:Element, _ rhs:Element) throws ->Bool) rethrows -> [[Element]] {
+    func group(isEqual:(_ lhs:Element, _ rhs:Element) throws ->Bool) rethrows -> [[Element]] {
         var result:[[Element]] = []
         
         for item in self {
@@ -138,7 +138,7 @@ public extension Collection {
         return result
     }
     
-    public func areEqual(_ predicate:(Element, Element) throws -> Bool) rethrows -> Bool {
+    func areEqual(_ predicate:(Element, Element) throws -> Bool) rethrows -> Bool {
         if count < 2 { return true }
         
         for n in stride(from: 1, to: count, by: 1) {
@@ -148,7 +148,7 @@ public extension Collection {
         return true
     }
     
-    public func areSerial(_ predicate:(Element, Element) throws -> Bool) rethrows -> Bool {
+    func areSerial(_ predicate:(Element, Element) throws -> Bool) rethrows -> Bool {
         if count < 2 { return true }
         
         for n in stride(from: 1, to: count, by: 1) {
@@ -158,7 +158,7 @@ public extension Collection {
         return true
     }
     
-    public var nearList:[NearItem<Self.Element>] {
+    var nearList:[NearItem<Self.Element>] {
         var result:[NearItem<Self.Element>] = []
         
         for n in stride(from: 0, to: count, by: 1) {
@@ -171,7 +171,7 @@ public extension Collection {
         return result
     }
     
-    public func forEachNear(_ predicate:(_ item:NearItem<Self.Element>) throws -> ()) rethrows {
+    func forEachNear(_ predicate:(_ item:NearItem<Self.Element>) throws -> ()) rethrows {
         for n in stride(from: 0, to: count, by: 1) {
             let item = NearItem(self.value(at: self.index(self.startIndex, offsetBy: n-1)),
                                 self[self.index(self.startIndex, offsetBy: n)],
@@ -181,25 +181,25 @@ public extension Collection {
     }
 }
 
-public extension Collection where Element : Equatable {
-    public func group() -> [[Element]] {
+extension Collection where Element : Equatable {
+    func group() -> [[Element]] {
         return group(isEqual: { $0 == $1 })
     }
     
-    public var areEqual:Bool {
+    var areEqual:Bool {
         return areEqual({ $0 == $1 })
     }
 }
 
-public struct EnumItem<T:Numeric> {
-    public var index:Int
-    public var element:T
-    public var amount:T
-    public var total:T
+struct EnumItem<T:Numeric> {
+    var index:Int
+    var element:T
+    var amount:T
+    var total:T
 }
 
-public extension Collection where Element : Numeric {
-    public func forEachScore(_ predicate:(EnumItem<Element>) throws ->()) rethrows {
+extension Collection where Element : Numeric {
+    func forEachScore(_ predicate:(EnumItem<Element>) throws ->()) rethrows {
         let total = self.reduce(0, +)
         var used:Self.Element = 0
         var n = 0

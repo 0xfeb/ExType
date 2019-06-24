@@ -8,14 +8,14 @@
 
 import Foundation
 
-public extension Date {
-    public var ISOString:String {
+extension Date {
+    var ISOString:String {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = Calendar.current.timeZone
         return formatter.string(from: self)
     }
     
-    public init?(ISOString:String) {
+    init?(ISOString:String) {
         func timeOptions(_ ISOString:String) -> ISO8601DateFormatter.Options {
             var options = ISO8601DateFormatter.Options()
             
