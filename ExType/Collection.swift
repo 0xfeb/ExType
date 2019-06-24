@@ -189,6 +189,25 @@ public extension Collection where Element : Equatable {
     var areEqual:Bool {
         return areEqual({ $0 == $1 })
     }
+    
+    
+    func isFitAny(map:(Element)->Bool) -> Bool {
+        for n in self {
+            if map(n) == true {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func isFitAll(map:(Element)->Bool) -> Bool {
+        for n in self {
+            if map(n) == false {
+                return false
+            }
+        }
+        return true
+    }
 }
 
 public struct EnumItem<T:Numeric> {
