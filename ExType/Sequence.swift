@@ -54,7 +54,7 @@ public extension Sequence {
 
 }
 
-extension Sequence where Element : Equatable {
+public extension Sequence where Element : Equatable {
     func count(_ element:Element) -> UInt {
         return count(check: { $0 == element })
     }

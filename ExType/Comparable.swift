@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Comparable {
+public extension Comparable {
     mutating func limit(_ min: Self, _ max: Self) {
         if self < min { self = min }
         if self > max { self = max }

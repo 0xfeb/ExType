@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Date {
+public extension Date {
     var ISOString:String {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = Calendar.current.timeZone

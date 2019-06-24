@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Int {
+public extension Int {
     //support chinese number in hex text
     private init(hex: Character) {
         switch hex {

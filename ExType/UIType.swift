@@ -10,7 +10,7 @@ import UIKit
 
 fileprivate let apartText = "%"
 
-extension UIFont {
+public extension UIFont {
     convenience init?(text:String) {
         guard let (name, size) = text.split(apartText, limit: 2).tuple2 else { return nil }
         guard let textSize = Float(size) else { return nil }
@@ -23,7 +23,7 @@ extension UIFont {
     }
 }
 
-extension CGRect {
+public extension CGRect {
     init?(text:String) {
         guard let (x, y, w, h) = text.split(apartText, limit: 4).tuple4 else { return nil }
         guard let left = Double(x), let top = Double(y),
@@ -37,7 +37,7 @@ extension CGRect {
     }
 }
 
-extension CGPoint {
+public extension CGPoint {
     init?(text:String) {
         guard let (x, y) = text.split(apartText, limit: 2).tuple2 else { return nil }
         guard let left = Double(x), let top = Double(y) else { return nil }
@@ -50,7 +50,7 @@ extension CGPoint {
     }
 }
 
-extension CGSize {
+public extension CGSize {
     init?(text:String) {
         guard let (w, h) = text.split(apartText, limit: 2).tuple2 else { return nil }
         guard let width = Double(w), let height = Double(h) else { return nil }
@@ -63,7 +63,7 @@ extension CGSize {
     }
 }
 
-extension CGAffineTransform {
+public extension CGAffineTransform {
     init?(text:String) {
         guard let (_a, _b, _c, _d, _tx, _ty) = text.split(apartText, limit: 6).tuple6 else { return nil }
         guard let a = Double(_a), let b = Double(_b), let c = Double(_c), let d = Double(_d),

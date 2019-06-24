@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Array {
+public extension Array {
     func removed(at position:Array.Index) throws -> Array {
         if position < self.startIndex || position >= self.endIndex {
             throw CollectionError.invalidIndex
@@ -34,7 +34,7 @@ extension Array {
     }
 }
 
-extension Array where Element : Equatable {
+public extension Array where Element : Equatable {
     func removed(in list:[Element]) -> [Element] {
         return self.filter({ !list.contains($0) })
     }

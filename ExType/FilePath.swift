@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension String {
+public extension String {
     var existsDirectory:Bool {
         if let attr = try? FileManager.default.attributesOfItem(atPath: self),
             let type = attr[FileAttributeKey.type] as? FileAttributeType {

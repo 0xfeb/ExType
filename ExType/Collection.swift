@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum CollectionError : Error {
+public enum CollectionError : Error {
     case invalidIndex
 }
 
-struct NearItem<T> {
+public struct NearItem<T> {
     var prev:T?
     var current:T
     var next:T?
@@ -25,12 +25,12 @@ struct NearItem<T> {
 }
 
 extension NearItem : Equatable where T:Equatable {
-    static func == (lhs: NearItem<T>, rhs: NearItem<T>) -> Bool {
+    public static func == (lhs: NearItem<T>, rhs: NearItem<T>) -> Bool {
         return lhs.prev==rhs.prev && lhs.current==rhs.current && lhs.next==rhs.next
     }
 }
 
-extension Collection {
+public extension Collection {
     func value(at index:Self.Index) -> Element? {
         if index < self.startIndex || index >= self.endIndex {
             return nil
@@ -181,7 +181,7 @@ extension Collection {
     }
 }
 
-extension Collection where Element : Equatable {
+public extension Collection where Element : Equatable {
     func group() -> [[Element]] {
         return group(isEqual: { $0 == $1 })
     }
@@ -191,14 +191,14 @@ extension Collection where Element : Equatable {
     }
 }
 
-struct EnumItem<T:Numeric> {
+public struct EnumItem<T:Numeric> {
     var index:Int
     var element:T
     var amount:T
     var total:T
 }
 
-extension Collection where Element : Numeric {
+public extension Collection where Element : Numeric {
     func forEachScore(_ predicate:(EnumItem<Element>) throws ->()) rethrows {
         let total = self.reduce(0, +)
         var used:Self.Element = 0
